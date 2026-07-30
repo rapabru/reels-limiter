@@ -1,0 +1,5 @@
+# Temp files
+*.log
+.DS_Store
+Thumbs.db
+generate_icons.py

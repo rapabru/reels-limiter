@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reels Limiter</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body class="theme-dark">
+  <div class="popup-container">
+    <!-- Header -->
+    <header class="popup-header">
+      <div class="brand">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/>
+          </svg>
+        </div>
+        <div class="title-group">
+          <h1>Reels Limiter</h1>
+          <span class="badge">v1.2</span>
+        </div>
+      </div>
+
+      <div class="header-actions">
+        <!-- Language Selector -->
+        <select id="lang-select" class="lang-select" title="Change Language">
+          <option value="en">🇬🇧 EN</option>
+          <option value="es">🇪🇸 ES</option>
+          <option value="pt">🇧🇷 PT</option>
+          <option value="fr">🇫🇷 FR</option>
+          <option value="de">🇩🇪 DE</option>
+        </select>
+
+        <!-- Theme Toggle (Day / Night) -->
+        <button type="button" class="theme-toggle-btn" id="theme-btn" title="Toggle Day/Night Mode">
+          <span class="theme-icon" id="theme-icon">🌙</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="popup-body">
+      <!-- Section 1: Primary Mode -->
+      <section class="control-section">
+        <label class="section-label" id="lbl-primary-mode">Primary Mode</label>
+        <div class="mode-grid">
+          <button type="button" class="mode-card" data-mode="hide">
+            <span class="mode-icon">🛑</span>
+            <span class="mode-name" id="txt-mode-hide">Hide Reels</span>
+          </button>
+          
+          <button type="button" class="mode-card" data-mode="noswipe">
+            <span class="mode-icon">🔒</span>
+            <span class="mode-name" id="txt-mode-noswipe">No Swipe</span>
+          </button>
+
+          <button type="button" class="mode-card" data-mode="off">
+            <span class="mode-icon">⚡</span>
+            <span class="mode-name" id="txt-mode-off">Off</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- Section 2: Visual Filters (Independent Black & White) -->
+      <section class="control-section">
+        <label class="section-label" id="lbl-visual-filters">Visual Filters</label>
+        <div class="toggle-row">
+          <div class="toggle-info">
+            <span class="toggle-icon">🎨</span>
+            <div class="toggle-text">
+              <span class="toggle-title" id="txt-bw-title">Black & White Mode</span>
+              <span class="toggle-desc" id="txt-bw-desc">Grayscale reels & thumbnails</span>
+            </div>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="bw-toggle">
+            <span class="slider"></span>
+          </label>
+        </div>
+      </section>
+
+      <!-- Section 3: Session Limiter -->
+      <section class="control-section">
+        <label class="section-label" id="lbl-session-limit">Session Limit</label>
+        <div class="limit-selector">
+          <button type="button" class="limit-btn" data-limit="0" id="btn-limit-off">Off</button>
+          <button type="button" class="limit-btn" data-limit="5">5</button>
+          <button type="button" class="limit-btn" data-limit="10">10</button>
+          <button type="button" class="limit-btn" data-limit="15">15</button>
+        </div>
+      </section>
+
+      <!-- Section 4: Session Progress -->
+      <section class="progress-card">
+        <div class="progress-header">
+          <span class="progress-title" id="lbl-session-watched">Session Watched</span>
+          <span class="progress-count" id="count-display">0 / 10</span>
+        </div>
+        
+        <div class="progress-bar-track">
+          <div class="progress-bar-fill" id="progress-fill"></div>
+        </div>
+
+        <button type="button" class="reset-btn" id="reset-btn">
+          <svg viewBox="0 0 24 24" width="14" height="14">
+            <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
+          </svg>
+          <span id="txt-reset-btn">Reset Session Counter</span>
+        </button>
+      </section>
+    </main>
+
+    <!-- Footer with GitHub / Donate link -->
+    <footer class="popup-footer">
+      <a href="https://github.com/rapabru" target="_blank" class="github-donate-btn" id="github-link">
+        <svg viewBox="0 0 24 24" class="github-icon">
+          <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+        </svg>
+        <span id="txt-donate-btn">Support project / Donate</span>
+        <span class="heart-icon">💖</span>
+      </a>
+    </footer>
+  </div>
+
+  <script src="i18n.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

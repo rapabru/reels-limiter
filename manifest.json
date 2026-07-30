@@ -1,0 +1,44 @@
+{
+  "manifest_version": 3,
+  "name": "Reels Limiter",
+  "version": "1.0.0",
+  "description": "Take back control of short-form video feeds on Instagram. Block, grayscale, limit, or stop auto-swiping.",
+  "permissions": [
+    "storage"
+  ],
+  "host_permissions": [
+    "*://*.instagram.com/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*.instagram.com/*"
+      ],
+      "css": [
+        "styles.css"
+      ],
+      "js": [
+        "i18n.js",
+        "selectors.js",
+        "content-script.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}
