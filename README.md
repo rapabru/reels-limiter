@@ -11,7 +11,12 @@
 - If you attempt to open a direct Reels URL (`instagram.com/reels/`), it automatically redirects you back to your Home Feed.
 - Keeps your Instagram Feed, Stories, Direct Messages, and Notifications 100% visible and functional.
 
-### 🎨 2. Independent Black & White Mode / Modo Blanco y Negro
+### 🎬 2. Reels as Videos Mode / Modo Reels a Videos
+- Converts any Reel URL (`/reels/ID/` or `/reel/ID/`) into a standard static Instagram video post (`/p/ID/`).
+- Rewrites all Reel links across Instagram so they open as regular posts with native video controls.
+- Completely eliminates the infinite vertical swipe player!
+
+### 🎨 3. Independent Black & White Mode / Modo Blanco y Negro
 - Applies a 100% grayscale filter (`filter: grayscale(100%)`) to all Reel videos, thumbnails, posts, and canvases.
 - Can be combined with **Hide Reels**, **No Swipe**, or **Off** modes.
 - Powered by hardware-accelerated CSS for zero performance overhead.
