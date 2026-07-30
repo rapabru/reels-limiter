@@ -7,7 +7,6 @@ const I18N_DICTIONARY = {
   en: {
     primaryMode: "Primary Mode",
     hideReels: "Hide Reels",
-    reelToVideo: "Reels as Videos",
     noSwipe: "No Swipe",
     off: "Off",
     visualFilters: "Visual Filters",
@@ -33,7 +32,6 @@ const I18N_DICTIONARY = {
   es: {
     primaryMode: "Modo Principal",
     hideReels: "Ocultar Reels",
-    reelToVideo: "Reels a Videos",
     noSwipe: "Sin Swipe",
     off: "Desactivado",
     visualFilters: "Filtros Visuales",
@@ -59,7 +57,6 @@ const I18N_DICTIONARY = {
   pt: {
     primaryMode: "Modo Principal",
     hideReels: "Ocultar Reels",
-    reelToVideo: "Reels em Vídeos",
     noSwipe: "Sem Swipe",
     off: "Desativado",
     visualFilters: "Filtros Visuais",
@@ -85,7 +82,6 @@ const I18N_DICTIONARY = {
   fr: {
     primaryMode: "Mode Principal",
     hideReels: "Masquer Reels",
-    reelToVideo: "Reels en Vidéos",
     noSwipe: "Sans Swipe",
     off: "Désactivé",
     visualFilters: "Filtres Visuels",
@@ -111,7 +107,6 @@ const I18N_DICTIONARY = {
   de: {
     primaryMode: "Hauptmodus",
     hideReels: "Reels ausblenden",
-    reelToVideo: "Reels als Videos",
     noSwipe: "Kein Wischen",
     off: "Aus",
     visualFilters: "Visuelle Filter",

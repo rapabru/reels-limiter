@@ -142,7 +142,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     setTxt('lbl-primary-mode', 'primaryMode');
     setTxt('txt-mode-hide', 'hideReels');
-    setTxt('txt-mode-video', 'reelToVideo');
     setTxt('txt-mode-noswipe', 'noSwipe');
     setTxt('txt-mode-off', 'off');
     setTxt('lbl-visual-filters', 'visualFilters');
