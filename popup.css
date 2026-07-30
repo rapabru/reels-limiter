@@ -172,10 +172,10 @@ body {
   color: var(--text-label);
 }
 
-/* Mode Grid (3 options) */
+/* Mode Grid (4 options: 2x2 grid) */
 .mode-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 6px;
 }
 

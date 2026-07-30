@@ -135,11 +135,52 @@
         removeOverlayIfType('hide');
       }
 
-      // 4. Check session limit regardless of mode
+      // 4. Primary Mode: Reels as Videos ('video')
+      if (currentMode === 'video') {
+        enforceReelToVideoMode();
+        if (isReelUrl) {
+          convertCurrentReelToVideoPost();
+          return;
+        }
+      }
+
+      // 5. Check session limit regardless of mode
       checkSessionLimitExceeded();
 
     } catch (e) {
       console.warn('[Reels Limiter] Error applying mode:', e);
+    }
+  }
+
+  function enforceReelToVideoMode() {
+    try {
+      // Rewrite all /reel/ and /reels/ links to /p/ links
+      document.querySelectorAll('a[href*="/reels/"], a[href*="/reel/"]').forEach(anchor => {
+        const href = anchor.getAttribute('href');
+        if (href && (href.includes('/reels/') || href.includes('/reel/'))) {
+          const newHref = href.replace('/reels/', '/p/').replace('/reel/', '/p/');
+          anchor.setAttribute('href', newHref);
+        }
+      });
+
+      // Enable native controls on video elements
+      document.querySelectorAll('video').forEach(video => {
+        video.controls = true;
+      });
+    } catch (e) {
+      console.warn('[Reels Limiter] Error in video mode:', e);
+    }
+  }
+
+  function convertCurrentReelToVideoPost() {
+    try {
+      const path = window.location.pathname;
+      if (path.includes('/reels/') || path.includes('/reel/')) {
+        const newPath = path.replace('/reels/', '/p/').replace('/reel/', '/p/');
+        window.location.replace(window.location.origin + newPath);
+      }
+    } catch (e) {
+      console.warn('[Reels Limiter] Error converting Reel to post:', e);
     }
   }
 
