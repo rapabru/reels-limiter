@@ -7,6 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const modeCards = document.querySelectorAll('.mode-card');
   const limitBtns = document.querySelectorAll('.limit-btn');
   const bwToggle = document.getElementById('bw-toggle');
+  const doomscrollToggle = document.getElementById('doomscroll-toggle');
   const themeBtn = document.getElementById('theme-btn');
   const themeIcon = document.getElementById('theme-icon');
   const langSelect = document.getElementById('lang-select');
@@ -16,6 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let currentMode = 'off'; // 'hide' | 'noswipe' | 'off'
   let grayscaleEnabled = false;
+  let doomscrollEnabled = true;
   let currentTheme = 'dark';
   let currentLang = 'en';
   let sessionLimit = 0;
@@ -27,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const defaultLang = supportedLangs.includes(browserLang) ? browserLang : 'en';
 
   // 1. Initial Load of Saved Settings
-  chrome.storage.sync.get(['mode', 'grayscaleEnabled', 'sessionLimit', 'popupTheme', 'language'], (syncData) => {
+  chrome.storage.sync.get(['mode', 'grayscaleEnabled', 'sessionLimit', 'popupTheme', 'language', 'doomscrollEnabled'], (syncData) => {
     currentMode = syncData.mode || 'off';
     if (currentMode === 'grayscale') {
       currentMode = 'off';
@@ -37,6 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
       grayscaleEnabled = !!syncData.grayscaleEnabled;
     }
 
+    doomscrollEnabled = syncData.doomscrollEnabled !== false;
     sessionLimit = syncData.sessionLimit || 0;
     currentTheme = syncData.popupTheme || 'dark';
     currentLang = syncData.language || defaultLang;
@@ -50,6 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
     updateLanguageUI(currentLang);
     updateModeUI(currentMode);
     updateBwUI(grayscaleEnabled);
+    updateDoomscrollUI(doomscrollEnabled);
     updateThemeUI(currentTheme);
     updateLimitUI(sessionLimit);
 
@@ -92,6 +96,14 @@ document.addEventListener('DOMContentLoaded', () => {
     grayscaleEnabled = bwToggle.checked;
     chrome.storage.sync.set({ grayscaleEnabled: grayscaleEnabled });
   });
+
+  // 4b. Doomscroll Reminder Toggle Listener
+  if (doomscrollToggle) {
+    doomscrollToggle.addEventListener('change', () => {
+      doomscrollEnabled = doomscrollToggle.checked;
+      chrome.storage.sync.set({ doomscrollEnabled: doomscrollEnabled });
+    });
+  }
 
   // 5. Day / Night Theme Toggle Listener
   themeBtn.addEventListener('click', () => {
@@ -147,6 +159,8 @@ document.addEventListener('DOMContentLoaded', () => {
     setTxt('lbl-visual-filters', 'visualFilters');
     setTxt('txt-bw-title', 'bwTitle');
     setTxt('txt-bw-desc', 'bwDesc');
+    setTxt('txt-doomscroll-title', 'doomscrollToggleTitle');
+    setTxt('txt-doomscroll-desc', 'doomscrollToggleDesc');
     setTxt('lbl-session-limit', 'sessionLimit');
     setTxt('btn-limit-off', 'off');
     setTxt('lbl-session-watched', 'sessionWatched');
@@ -167,6 +181,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function updateBwUI(isEnabled) {
     bwToggle.checked = isEnabled;
+  }
+
+  function updateDoomscrollUI(enabled) {
+    if (doomscrollToggle) doomscrollToggle.checked = enabled;
   }
 
   function updateThemeUI(theme) {

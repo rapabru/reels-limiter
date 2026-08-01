@@ -9,10 +9,12 @@
   // State Variables
   let currentMode = 'off'; // 'hide' | 'noswipe' | 'off'
   let grayscaleEnabled = false;
+  let doomscrollEnabled = true;
   let currentLang = 'en';
   let sessionLimit = 0;   // 0 (disabled), 5, 10, 15
   let sessionReelsCount = 0;
   const seenReelsSet = new Set();
+  const seenHomePostsSet = new Set();
   
   // Track currently active video for view timer
   let activeVideoObservation = {
@@ -21,8 +23,9 @@
     timer: null
   };
 
-  // Overlay container ref
+  // Overlay & Toast container refs
   let activeOverlay = null;
+  let activeDoomscrollToast = null;
 
   // Initialize Extension State
   function init() {
@@ -32,6 +35,7 @@
     setupUrlListener();
     setupSwipeBlocker();
     setupViewTracker();
+    setupDoomscrollTracker();
     
     // Initial run
     applyActiveMode();
@@ -50,7 +54,7 @@
   // 1. Load Settings from Storage
   function loadSettings() {
     try {
-      chrome.storage.sync.get(['mode', 'grayscaleEnabled', 'sessionLimit', 'language'], (syncData) => {
+      chrome.storage.sync.get(['mode', 'grayscaleEnabled', 'sessionLimit', 'language', 'doomscrollEnabled'], (syncData) => {
         currentMode = syncData.mode || 'off';
         // Handle migration from old mode === 'grayscale'
         if (currentMode === 'grayscale') {
@@ -60,6 +64,7 @@
           grayscaleEnabled = !!syncData.grayscaleEnabled;
         }
 
+        doomscrollEnabled = syncData.doomscrollEnabled !== false;
         currentLang = syncData.language || getDefaultLanguage();
         sessionLimit = syncData.sessionLimit || 0;
 
@@ -86,6 +91,7 @@
         if (areaName === 'sync') {
           if (changes.mode) currentMode = changes.mode.newValue || 'off';
           if (changes.grayscaleEnabled !== undefined) grayscaleEnabled = !!changes.grayscaleEnabled.newValue;
+          if (changes.doomscrollEnabled !== undefined) doomscrollEnabled = !!changes.doomscrollEnabled.newValue;
           if (changes.language) currentLang = changes.language.newValue || getDefaultLanguage();
           if (changes.sessionLimit) sessionLimit = changes.sessionLimit.newValue || 0;
           applyActiveMode();
@@ -367,6 +373,112 @@
     } else if (activeOverlay && activeOverlay.dataset.overlayType === 'limit' && sessionReelsCount < sessionLimit) {
       removeOverlayIfType('limit');
     }
+  }
+
+  // 7b. Feature: Home Feed Doomscroll Tracker (Every 10 Posts)
+  function setupDoomscrollTracker() {
+    const postObserver = new IntersectionObserver((entries) => {
+      if (!doomscrollEnabled || isReelsPage()) return;
+
+      entries.forEach(entry => {
+        if (entry.isIntersecting && entry.intersectionRatio >= 0.4) {
+          const article = entry.target;
+          const postId = getPostIdentifier(article);
+          if (postId && !seenHomePostsSet.has(postId)) {
+            seenHomePostsSet.add(postId);
+            const count = seenHomePostsSet.size;
+            if (count > 0 && count % 10 === 0) {
+              showDoomscrollToast(count);
+            }
+          }
+        }
+      });
+    }, { threshold: 0.4 });
+
+    setInterval(() => {
+      if (!doomscrollEnabled || isReelsPage()) return;
+
+      const postsSelector = (typeof REELS_SELECTORS !== 'undefined' && REELS_SELECTORS.feedPosts)
+        ? REELS_SELECTORS.feedPosts
+        : 'main article, article';
+
+      document.querySelectorAll(postsSelector).forEach(article => {
+        if (!article.dataset.reelsLimiterPostObserved) {
+          article.dataset.reelsLimiterPostObserved = 'true';
+          postObserver.observe(article);
+        }
+      });
+    }, 1000);
+  }
+
+  function getPostIdentifier(articleEl) {
+    const postLink = articleEl.querySelector('a[href*="/p/"]');
+    if (postLink) return postLink.getAttribute('href');
+    const timeEl = articleEl.querySelector('time');
+    if (timeEl) return timeEl.getAttribute('datetime') || timeEl.textContent;
+    return articleEl.innerText ? articleEl.innerText.slice(0, 50) : null;
+  }
+
+  function showDoomscrollToast(count) {
+    if (!doomscrollEnabled) return;
+
+    if (activeDoomscrollToast) {
+      activeDoomscrollToast.remove();
+      activeDoomscrollToast = null;
+    }
+
+    const toast = document.createElement('div');
+    toast.className = 'reels-limiter-toast';
+    toast.innerHTML = `
+      <div class="reels-limiter-toast-content">
+        <div class="reels-limiter-toast-badge">⏳</div>
+        <div class="reels-limiter-toast-text">
+          <strong class="reels-limiter-toast-title">${tr('doomscrollTitle')}</strong>
+          <span class="reels-limiter-toast-subtitle">${tr('doomscrollDesc', { count: count })}</span>
+        </div>
+      </div>
+      <div class="reels-limiter-toast-actions">
+        <button class="reels-limiter-toast-btn-top" id="rl-toast-top">${tr('doomscrollBtnTop')}</button>
+        <button class="reels-limiter-toast-btn-dismiss" id="rl-toast-dismiss">${tr('doomscrollBtnDismiss')}</button>
+      </div>
+    `;
+
+    document.body.appendChild(toast);
+    activeDoomscrollToast = toast;
+
+    requestAnimationFrame(() => {
+      toast.classList.add('visible');
+    });
+
+    const autoDismissTimer = setTimeout(() => {
+      dismissDoomscrollToast(toast);
+    }, 12000);
+
+    const dismissBtn = toast.querySelector('#rl-toast-dismiss');
+    if (dismissBtn) {
+      dismissBtn.addEventListener('click', () => {
+        clearTimeout(autoDismissTimer);
+        dismissDoomscrollToast(toast);
+      });
+    }
+
+    const topBtn = toast.querySelector('#rl-toast-top');
+    if (topBtn) {
+      topBtn.addEventListener('click', () => {
+        clearTimeout(autoDismissTimer);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        dismissDoomscrollToast(toast);
+      });
+    }
+  }
+
+  function dismissDoomscrollToast(toast) {
+    if (!toast) return;
+    toast.classList.remove('visible');
+    setTimeout(() => {
+      if (toast && toast.parentNode) toast.remove();
+      if (activeDoomscrollToast === toast) activeDoomscrollToast = null;
+    }, 300);
   }
 
   // 8. Overlay Manager

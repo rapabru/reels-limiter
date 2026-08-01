@@ -26,6 +26,12 @@
 - Dynamic extension badge indicator showing watched count (e.g. `3 / 5`).
 - Displays a customizable overlay when your session limit is reached with a **Reset Counter** button.
 
+### ⏳ 5. Home Feed Doomscroll Reminder / Aviso de Doomscroll
+- Tracks unique posts scrolled past on Instagram's Home Feed.
+- Every 10 posts, displays a floating glassmorphic alert asking if you are doomscrolling.
+- Features quick actions: **Back to Top** (smooth scroll) and **Got it** (dismiss).
+- Can be toggled ON/OFF independently in the extension popup.
+
 ### 🌐 5. 5 Supported Languages (i18n) / 5 Idiomas Compatibles
 - 🇬🇧 **English** (`en`)
 - 🇪🇸 **Español** (`es`)

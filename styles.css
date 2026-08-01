@@ -168,3 +168,119 @@ body.reels-limiter-bw-active {
     transform: scale(1);
   }
 }
+
+/* ==========================================================================
+   Doomscroll Toast Notification (Floating Glassmorphism Alert)
+   ========================================================================== */
+.reels-limiter-toast {
+  position: fixed !important;
+  top: 20px !important;
+  left: 50% !important;
+  transform: translateX(-50%) translateY(-30px) !important;
+  z-index: 2147483647 !important;
+  background: rgba(18, 18, 24, 0.94) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border: 1px solid rgba(255, 77, 106, 0.4) !important;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6), 0 0 20px rgba(255, 77, 106, 0.2) !important;
+  border-radius: 16px !important;
+  padding: 14px 20px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 16px !important;
+  max-width: 480px !important;
+  width: 90% !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s ease !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
+  color: #ffffff !important;
+  box-sizing: border-box !important;
+}
+
+.reels-limiter-toast.visible {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  transform: translateX(-50%) translateY(0) !important;
+}
+
+.reels-limiter-toast-content {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  flex: 1 !important;
+}
+
+.reels-limiter-toast-badge {
+  font-size: 24px !important;
+  line-height: 1 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  border-radius: 12px !important;
+  width: 42px !important;
+  height: 42px !important;
+  flex-shrink: 0 !important;
+}
+
+.reels-limiter-toast-text {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 2px !important;
+}
+
+.reels-limiter-toast-title {
+  font-size: 14px !important;
+  font-weight: 700 !important;
+  color: #ffd166 !important;
+}
+
+.reels-limiter-toast-subtitle {
+  font-size: 12px !important;
+  color: #e2e8f0 !important;
+  line-height: 1.35 !important;
+}
+
+.reels-limiter-toast-actions {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  flex-shrink: 0 !important;
+}
+
+.reels-limiter-toast-btn-top {
+  background: linear-gradient(135deg, #ff4d6d 0%, #e63946 100%) !important;
+  color: #ffffff !important;
+  border: none !important;
+  border-radius: 8px !important;
+  padding: 8px 12px !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  white-space: nowrap !important;
+  transition: transform 0.15s ease, opacity 0.15s ease !important;
+}
+
+.reels-limiter-toast-btn-top:hover {
+  transform: scale(1.04) !important;
+  opacity: 0.95 !important;
+}
+
+.reels-limiter-toast-btn-dismiss {
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: #cbd5e1 !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  border-radius: 8px !important;
+  padding: 8px 12px !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  cursor: pointer !important;
+  white-space: nowrap !important;
+  transition: background 0.15s ease !important;
+}
+
+.reels-limiter-toast-btn-dismiss:hover {
+  background: rgba(255, 255, 255, 0.2) !important;
+  color: #ffffff !important;
+}

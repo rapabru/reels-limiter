@@ -32,6 +32,9 @@ chrome.runtime.onInstalled.addListener(() => {
     if (data.language === undefined) {
       chrome.storage.sync.set({ language: defaultLang });
     }
+    if (data.doomscrollEnabled === undefined) {
+      chrome.storage.sync.set({ doomscrollEnabled: true });
+    }
   });
 
   resetSessionCount();

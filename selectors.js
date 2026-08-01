@@ -42,6 +42,9 @@ const REELS_SELECTORS = {
     'a[href*="/reels/"]'
   ],
 
+  // Home feed articles / posts for doomscroll tracker
+  feedPosts: 'main article, article',
+
   // Next / Previous Reel buttons in the full-screen player
   nextReelButtons: [
     'button:has(svg[aria-label="Next"])',
